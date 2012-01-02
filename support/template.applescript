@@ -1,6 +1,8 @@
-on run (volumeName)
+on run argv
+	set volumeName to item 1 of argv
+	set dsStore to item 2 of argv
 	tell application "Finder"
-		tell disk (volumeName as string)
+		tell disk {volumeName as string}
 			open
 			
 			set theXOrigin to WINX
@@ -10,7 +12,6 @@ on run (volumeName)
 			
 			set theBottomRightX to (theXOrigin + theWidth)
 			set theBottomRightY to (theYOrigin + theHeight)
-			set dsStore to "\"" & "/Volumes/" & volumeName & "/" & ".DS_STORE\""
 			
 			tell container window
 				set current view to icon view
@@ -29,9 +30,9 @@ on run (volumeName)
 			
 			-- Positioning
 			POSITION_CLAUSE
-
-            close
-            open
+			
+			close
+			open
 			
 			update without registering applications
 			-- Force saving of the size
@@ -62,6 +63,8 @@ on run (volumeName)
 		set waitTime to 0
 		set ejectMe to false
 		repeat while ejectMe is false
+			-- Notify the user that we're doing something
+			log "wait for .DS_STORE to be created"
 			delay 1
 			set waitTime to waitTime + 1
 			
